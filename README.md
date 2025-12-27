@@ -47,7 +47,7 @@ Pada proyek ini, alat dan bahan yang digunakan adalah sebagai berikut:
    - Buka Arduino IDE → File → Preferences
    - Pada kolom Additional Board Manager URLs, tambahkan:   
      ``` https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json ```
-   - https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+   - Kemudian buka Tools → Board → Boards Manager, cari ESP32 dan klik Install.
    - Saat akan upload pilih board DOIT ESP32 DEVKIT V1
 2. **Instal Library Blynk:**   
    - Buka Sketch → Include Library → Manage Libraries
