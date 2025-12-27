@@ -38,9 +38,21 @@ Pada proyek ini, alat dan bahan yang digunakan adalah sebagai berikut:
 7. **Kabel jumper dan breadboard**: Untuk menyusun rangkaian prototipe.
 8. **Sumber daya**: Daya dari port USB laptop/PC atau adaptor 5V untuk Arduino.
 9. **Laptop/PC**: Untuk memprogram ESP32 menggunakan Arduino IDE dan memonitor keluaran melalui Serial Monitor.
-10. Aplikasi Blynk: Untuk konektivitas dan notifikasi berbasis IoT.
+10. **Aplikasi Blynk:** Untuk konektivitas dan notifikasi berbasis IoT.
 
-> *) komponen disesuaikan hanya untuk kebutuhan proyek ini
+> *) Catatan: Selain perangkat keras, pastikan juga menginstal dependensi yang dibutuhkan
+
+### Langkah-Langkah Instalasi Library & Board:
+1. **Instal Board ESP32 di Arduino IDE:**  
+   - Buka Arduino IDE → File → Preferences
+   - Pada kolom Additional Board Manager URLs, tambahkan:   
+     ``` https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json ```
+   - https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+   - Saat akan upload pilih board DOIT ESP32 DEVKIT V1
+2. **Instal Library Blynk:**   
+   - Buka Sketch → Include Library → Manage Libraries
+   - Cari Blynk dan pilih Blynk by Volodymyr Shymanskyy
+   - Klik Install
 
 ## Pengujian Komponen
 
@@ -219,7 +231,7 @@ Logika sistem dirancang untuk membedakan beberapa kondisi berdasarkan kombinasi 
 Desain ini mengadopsi pendekatan hierarkis: semakin tinggi tingkat bahaya, semakin intens pola bunyi dan cahaya. Pendekatan ini bertujuan memudahkan pengguna membedakan tingkat risiko hanya dengan memperhatikan perilaku LED, buzzer, dan relay, bahkan tanpa memerlukan visualisasi data di layar monitor. Penggunaan relay memungkinkan sistem untuk bereaksi lebih aktif terhadap kondisi darurat, seperti menyalakan mekanisme water sprinkle.
 
 ### 2. Implementasi Kode Sistem Alarm
-1. Versi Konvensional
+1. **Versi Konvensional**   
 Berikut adalah potongan kode implementasi sistem alarm kebakaran versi konvensional (tanpa koneksi internet), menggunakan ESP32 sebagai mikrokontroler utama. Kode ini mengintegrasikan pembacaan sensor gas dan api dengan logika aktivasi LED, buzzer, serta relay sebagai output pengendali eksternal.
 
 ```cpp
@@ -337,7 +349,7 @@ void loop() {
 ```
 > Versi ini bersifat standalone, di mana peringatan diberikan secara lokal menggunakan komponen fisik tanpa koneksi internet. telah diuji dan berfungsi.
 
-2. Versi IoT
+2. **Versi IoT**     
 Versi ini merupakan pengembangan dari sistem alarm konvensional dengan menambahkan konektivitas ke platform Blynk IoT. Dengan integrasi ini, ESP32 tidak hanya berfungsi sebagai unit deteksi lokal, tetapi juga mampu mengirimkan data sensor gas dan api ke aplikasi Blynk secara real-time. Pengguna dapat memantau tingkat konsentrasi gas (dalam bentuk persen), status deteksi api, serta mengakses sistem alarm dari jarak jauh. Blynk juga digunakan untuk menampilkan indikator status dan mengirimkan notifikasi langsung ke perangkat pengguna saat terjadi peningkatan gas, munculnya api, atau keduanya sekaligus. Selain itu, tersedia fitur kontrol manual untuk menyalakan atau mematikan relay melalui tombol di aplikasi.
 
 ```
