@@ -1,21 +1,20 @@
-const int sensor_gas = A0;
-const int sensor_api = 3;
+const int sensor_gas = 34;   // GPIO34 = ADC
+const int sensor_api = 27;   // GPIO27 = digital input
 
-float sensorGas_Value;
-int sensorApi_Value; 
+int sensorGas_ADC;
+int sensorApi_Value;
 
 void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode(sensor_gas, INPUT);
   pinMode(sensor_api, INPUT);
 }
 
 void loop() {
-  sensorGas_Value = analogRead(sensor_gas);
-  sensorApi_Value = !digitalRead(sensor_api);
+  sensorGas_ADC = analogRead(sensor_gas);          // nilai ADC gas (0–4095)
+  sensorApi_Value = !digitalRead(sensor_api);      // dibalik karena aktif LOW
 
-  Serial.println("Nilai Sensor Gas: " + String(sensorGas_Value));
-  Serial.println("Nilai Sensor Api: " + String(sensorApi_Value));
+  Serial.println("Nilai Sensor Gas (ADC): " + String(sensorGas_ADC));
+  Serial.println("Nilai Sensor Api (digital): " + String(sensorApi_Value));
   delay(500);
 }
