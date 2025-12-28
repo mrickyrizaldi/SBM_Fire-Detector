@@ -230,7 +230,72 @@ Logika sistem dirancang untuk membedakan beberapa kondisi berdasarkan kombinasi 
 
 Desain ini mengadopsi pendekatan hierarkis: semakin tinggi tingkat bahaya, semakin intens pola bunyi dan cahaya. Pendekatan ini bertujuan memudahkan pengguna membedakan tingkat risiko hanya dengan memperhatikan perilaku LED, buzzer, dan relay, bahkan tanpa memerlukan visualisasi data di layar monitor. Penggunaan relay memungkinkan sistem untuk bereaksi lebih aktif terhadap kondisi darurat, seperti menyalakan mekanisme water sprinkle.
 
-### 2. Implementasi Kode Sistem Alarm
+### 2. Konfigurasi Aplikasi Blynk
+Agar sistem alarm kebakaran berbasis ESP32 dapat terhubung dengan aplikasi Blynk dan mengirimkan data secara real-time serta menerima kontrol, ikuti tahapan berikut:
+##### 1. Membuat Template dan Device di Blynk  
+- Buka [Blynk Console](https://blynk.cloud/dashboard).
+- Klik menu “Templates” → **+ New Template**.
+- Isi nama: misalnya `Fire Alarm Project`.
+- Pilih perangkat: **ESP32**.
+- Connection type: **WiFi**.
+- Klik **Done**.
+- Buka tab “Datastreams” untuk menambahkan virtual pin:
+
+   | Nama        | Tipe    | Pin | Additional        |
+   | ----------- | ------- | --- | ----------------- |
+   | PersenGas   | Integer | V0  | Range: 0–100      |
+   | StatusApi   | Integer | V1  | 0 = aman, 1 = api |
+   | ManualRelay | Integer | V2  | 0/1 (write)       |
+   | StatusGas   | Integer | V3  | 0 = aman, 1 = gas |
+
+- Simpan, lalu kembali ke **Devices** → klik **+ New Device** → pilih **From Template**, pilih template tadi, lalu beri nama `Fire Alarm`.
+- Setelah device dibuat, akan muncul:
+   * BLYNK_TEMPLATE_ID
+   * BLYNK_TEMPLATE_NAME
+   * BLYNK_AUTH_TOKEN
+     Salin dan gunakan data ini di kode program.
+
+##### 2. Setup Aplikasi Blynk di HP
+- Unduh aplikasi Blynk IoT dari Play Store / App Store.
+- Login dengan akun yang sama seperti di Blynk Console.
+- Masuk ke menu "Devices", pilih device `Fire Alarm`.
+- Klik ikon pensil (edit layout), tambahkan widget berikut:
+   * **Gauge** → untuk gas:
+     * Datastream: V0 (PersenGas)
+     * Label: Persen Gas (%)
+   * **LED Widget** → untuk indikator api (V1) dan gas (V3)
+   * **Switch** → untuk kontrol manual relay:
+     * Datastream: V2
+     * Label: Kontrol Relay
+     * Mode: Switch (0 = OFF, 1 = ON)
+- Simpan dan kembali ke dashboard aplikasi.
+
+##### 3. Menambahkan Notifikasi Otomatis (Event Notification)
+- Di Blynk Console → buka template → tab “Events”.
+- Buat 3 event baru:
+
+   | Nama Event  | Event Code    | Message                                  |
+   | ----------- | ------------- | ---------------------------------------- |
+   | Deteksi Gas | `gas_alert`   | Gas terdeteksi, silahkan cek dahulu!     |
+   | Deteksi Api | `flame_alert` | Api terdeteksi, silahkan cek dahulu!     |
+   | Kebakaran   | `fire_alert`  | Gas & Api terdeteksi! Kebakaran mungkin! |
+
+- Setiap event aktif akan dikirim ke HP pengguna secara otomatis saat dipicu melalui fungsi program
+
+##### 4. Uji Coba dan Verifikasi
+Setelah setup selesai:
+* Upload kode ke ESP32 versi IoT.
+* Buka aplikasi Blynk, nyalakan perangkat.
+* Uji sensor menggunakan api / gas.
+* Perhatikan:
+  * Gauge (V0) naik jika gas terdeteksi.
+  * LED indikator menyala sesuai kondisi gas/api.
+  * Notifikasi muncul sesuai event.
+  * Switch dapat mengontrol relay (ON/OFF).
+
+> Dengan pengaturan ini, sistem alarm sudah sepenuhnya terintegrasi dengan aplikasi Blynk, siap menerima data sensor dan mengirimkan notifikasi secara otomatis.
+
+### 3. Implementasi Kode Sistem Alarm
 1. **Versi Konvensional**   
 Berikut adalah potongan kode implementasi sistem alarm kebakaran versi konvensional (tanpa koneksi internet), menggunakan ESP32 sebagai mikrokontroler utama. Kode ini mengintegrasikan pembacaan sensor gas dan api dengan logika aktivasi LED, buzzer, serta relay sebagai output pengendali eksternal.
 
