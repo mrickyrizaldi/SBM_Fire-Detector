@@ -1,4 +1,4 @@
-# Sistem IoT untuk Deteksi Dini Kebakaran Rumah dengan Sensor Gas dan Api yang Terhubung ke Layanan Pemadam Kebakaran
+# Sistem IoT untuk Deteksi Dini Kebakaran Rumah dengan Sensor Gas dan Api
 Nama : Muhammad Ricky Rizaldi    
 NIM : 2206030029    
 
@@ -17,7 +17,7 @@ Berdasarkan latar belakang tersebut, rumusan masalah yang diangkat dalam proyek 
 
 1. Bagaimana merancang sistem deteksi dini kebakaran berbasis mikrokontroler yang mampu membaca potensi bahaya melalui sensor gas dan sensor api?
 2. Bagaimana merancang pola notifikasi lokal melalui LED, buzzer, dan relay yang mampu merepresentasikan tingkat bahaya berdasarkan kombinasi kondisi gas dan api?
-3. Bagaimana mengembangkan sistem IoT yang dapat mengirimkan notifikasi potensi kebakaran secara real-time kepada pengguna dan terhubung dengan layanan pemadam kebakaran?
+3. Bagaimana mengembangkan sistem IoT yang dapat mengirimkan notifikasi potensi kebakaran secara real-time kepada pengguna?
 
 ## Tujuan
 
@@ -25,7 +25,7 @@ Tujuan dari proyek ini adalah:
 
 1. Merancang dan membangun prototipe sistem deteksi dini kebakaran berbasis mikrokontroler ESP32 yang mampu membaca potensi bahaya melalui sensor gas dan sensor api.
 2. Mengimplementasikan pola peringatan lokal melalui LED, buzzer, dan relay yang mampu merepresentasikan tingkat bahaya berdasarkan kombinasi kondisi sensor gas dan sensor api.
-3. Mengembangkan rancangan awal sistem IoT yang mampu mengirimkan notifikasi potensi kebakaran secara real-time kepada pengguna melalui layanan Blynk dan menyediakan mekanisme koneksi ke layanan pemadam kebakaran.
+3. Mengembangkan rancangan awal sistem IoT yang mampu mengirimkan notifikasi potensi kebakaran secara real-time kepada pengguna melalui layanan Blynk.
 
 ## Alat dan Bahan
 
