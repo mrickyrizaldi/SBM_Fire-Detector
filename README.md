@@ -1,4 +1,6 @@
 # Sistem IoT untuk Deteksi Dini Kebakaran Rumah dengan Sensor Gas dan Api yang Terhubung ke Layanan Pemadam Kebakaran
+Nama : Muhammad Ricky Rizaldi    
+NIM : 2206030029    
 
 ## Latar Belakang
 
@@ -604,3 +606,74 @@ void loop() {
 }
 ```
 > Dengan implementasi ini, sistem alarm menjadi lebih informatif dan responsif. Pendekatan non-blocking digunakan untuk mengatur pola kedipan LED dan bunyi buzzer tanpa menghambat proses lainnya. Fitur notifikasi berbasis event juga memastikan pengguna mendapatkan peringatan hanya satu kali per kejadian, sehingga tidak terjadi spam. Selain itu, sistem akan tetap mengaktifkan relay meskipun sensor kembali normal, sebagai indikator bahwa pernah terjadi kondisi bahaya, hingga pengguna meresetnya lewat aplikasi. Hal ini menjadikan versi IoT ini sangat cocok untuk aplikasi pemantauan kebakaran secara real-time di lingkungan rumah maupun industri.
+
+Berikut adalah isi lengkap untuk dua bagian akhir dalam laporanmu: Bab V (Hasil dan Pembahasan) dan Bab VI (Penutup). Lokasi penempatan gambar juga disertakan sebagai panduan.
+
+---
+
+## HASIL DAN PEMBAHASAN
+
+Setelah seluruh rangkaian disusun dan perangkat diprogram, sistem alarm kebakaran diuji dengan berbagai skenario untuk mengamati respons output terhadap kondisi sensor serta integrasi IoT melalui platform Blynk. Berikut adalah hasil pengamatan dan pembahasan untuk tiap fungsionalitas utama.
+
+### 1. Tampilan Alat
+
+Gambar berikut menunjukkan prototipe alat deteksi dini kebakaran berbasis ESP32 yang telah dirakit:
+
+<img src="https://github.com/user-attachments/assets/87b1a274-bc55-4acd-92e8-f263a02c3d5f" style="width: 30%; height: auto;" />
+<img src="https://github.com/user-attachments/assets/28fa247d-f65b-4643-af6a-29b5cdae8ea0" style="width: 30%; height: auto;" />
+<img src="https://github.com/user-attachments/assets/21532b11-0095-4d71-bd1a-b80e965e3a34" style="width: 30%; height: auto;" />
+
+Komponen seperti sensor gas, sensor api, buzzer, LED merah, dan relay dihubungkan ke board ESP32 via ekstension board. Penyusunan dilakukan agar mudah diakses saat pengujian serta sesuai dengan konfigurasi pin dalam kode program.
+
+### 2. Respons Sensor Gas dan Api
+
+Pengujian dilakukan dengan mendekatkan sumber asap/gas (misalnya korek gas) ke sensor MQ-135 dan sumber nyala api ke flame sensor. Terlihat bahwa:
+
+* Sensor gas mendeteksi adanya peningkatan konsentrasi gas (nilai ADC > 400).
+* Sensor api memberikan logika HIGH (dibalik secara digitalRead menjadi 1) saat menangkap nyala api.
+
+Respons kedua sensor ini langsung tercermin pada Serial Monitor dan indikator LED/buzzer. Hal ini menunjukkan bahwa kalibrasi threshold sudah cukup sensitif untuk mendeteksi kondisi tidak normal secara dini.
+
+### 3. Respons Output Lokal (LED, Buzzer, Relay)
+Sistem menunjukkan output berbeda tergantung kombinasi kondisi sensor:
+* Saat hanya gas terdeteksi: LED menyala konstan, buzzer bunyi pendek tiap beberapa detik.
+* Saat hanya api terdeteksi: LED dan buzzer berkedip lambat.
+* Saat gas dan api terdeteksi bersamaan: LED berkedip cepat, buzzer menyala kontinu, dan relay aktif.
+
+Setiap pola diatur dengan teknik non-blocking berbasis millis(), memastikan sistem tetap responsif tanpa menggunakan delay yang dapat menghambat fungsi lainnya.
+
+<img src="https://github.com/user-attachments/assets/62a69021-2761-4ccc-bd1f-69b81dc1e874" style="width: 40%; height: auto;" />
+<img src="https://github.com/user-attachments/assets/62a69021-2761-4ccc-bd1f-69b81dc1e874" style="width: 40%; height: auto;" />
+
+### 4. Integrasi Aplikasi Blynk
+Setelah konfigurasi template, datastream, dan widget selesai, ESP32 berhasil mengirimkan data real-time ke aplikasi Blynk. Fitur yang diuji meliputi:
+* Gauge (V0) menunjukkan persentase gas.
+* LED virtual (V1 & V3) menampilkan status api/gas.
+* Switch (V2) dapat mengontrol relay secara manual.
+* Notifikasi otomatis muncul di HP saat ada deteksi gas, api, atau kebakaran.
+
+<img src="https://github.com/user-attachments/assets/dbb70659-308e-4ce6-a793-744661eaf465" style="width: 50%; height: auto;" />
+<img src="https://github.com/user-attachments/assets/43e954df-9381-4db9-9a6a-3ba573b6e27e" style="width: 50%; height: auto;" />
+<img src="https://github.com/user-attachments/assets/d4440b24-fe27-4248-a178-16fffb3ff816" style="width: 50%; height: auto;" />
+<img src="https://github.com/user-attachments/assets/699f72f3-54cb-4c2a-92d8-31c6c47579be" style="width: 50%; height: auto;" />
+<img src="https://github.com/user-attachments/assets/a0ce24cf-9e49-4856-bb2d-5d2298a695e3" style="width: 50%; height: auto;" />
+    
+Dengan fitur ini, pengguna tidak hanya dapat memantau kondisi rumah dari jarak jauh, tetapi juga menerima peringatan langsung secara real-time. Relay dapat dinyalakan dari aplikasi untuk menyalakan alarm tambahan atau sistem pemadam.
+
+#### 5. Reset Kondisi Relay
+Salah satu kelebihan dari sistem ini adalah penggunaan status "terkunci" pada relay jika pernah terjadi kebakaran. Relay akan tetap aktif meskipun sensor kembali normal. Pengguna hanya dapat mematikan relay secara manual melalui tombol di Blynk. Hal ini mencegah potensi sistem kembali ke kondisi aman secara otomatis tanpa intervensi pengguna.
+
+<img src="https://github.com/user-attachments/assets/fd92d73b-334a-49c6-9f35-cf430681dc46" style="width: 30%; height: auto;" />
+<img src="https://github.com/user-attachments/assets/7bf29b37-d476-4470-9e74-96934b2c5200" style="width: 30%; height: auto;" />
+
+---
+
+## PENUTUP
+### Kesimpulan
+Berdasarkan hasil pengujian dan analisis sistem yang telah dikembangkan, dapat diambil beberapa kesimpulan sebagai berikut:
+1. Sistem berhasil mengintegrasikan sensor gas dan api dengan mikrokontroler ESP32 untuk mendeteksi potensi kebakaran secara lokal.
+2. Pola aktivasi buzzer, LED, dan relay dapat merepresentasikan kondisi bahaya berdasarkan kombinasi status sensor, serta ditangani dengan teknik non-blocking.
+3. Integrasi dengan Blynk memungkinkan pemantauan jarak jauh secara real-time serta pengiriman notifikasi otomatis ke perangkat pengguna saat terjadi bahaya.
+4. Kontrol manual terhadap relay melalui aplikasi memperkuat fleksibilitas sistem dalam merespons situasi darurat atau pasca kebakaran.
+
+
