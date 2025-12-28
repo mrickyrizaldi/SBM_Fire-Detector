@@ -37,7 +37,7 @@ Pada proyek ini, alat dan bahan yang digunakan adalah sebagai berikut:
 4. **LED Merah**: Sebagai indikator visual kondisi bahaya atau status sistem.
 5. **Buzzer**: Sebagai indikator suara untuk memberikan peringatan audio dengan pola tertentu.
 6. **Relay:** Untuk mengontrol beban eksternal seperti pompa air atau alarm tambahan.
-7. **Kabel jumper dan breadboard**: Untuk menyusun rangkaian prototipe.
+7. **Kabel jumper**: Untuk menyusun rangkaian prototipe.
 8. **Sumber daya**: Daya dari port USB laptop/PC atau adaptor 5V untuk Arduino.
 9. **Laptop/PC**: Untuk memprogram ESP32 menggunakan Arduino IDE dan memonitor keluaran melalui Serial Monitor.
 10. **Aplikasi Blynk:** Untuk konektivitas dan notifikasi berbasis IoT.
@@ -132,7 +132,8 @@ void loop() {
 Setelah komponen input dan output berhasil diuji, langkah berikutnya adalah memastikan bahwa modul ESP32 dapat terhubung dengan jaringan WiFi. Hal ini penting sebagai dasar bagi komunikasi Internet of Things (IoT) yang akan digunakan pada sistem ini.
 
 Pengujian dilakukan dengan menggunakan kode berikut:
-```
+
+```cpp
 #include <WiFi.h>
 
 const char* ssid = "master";           // Ganti dengan nama WiFi Anda
@@ -161,7 +162,7 @@ void loop() {
 ### 4. Pengujian Koneksi Blynk
 Jika koneksi berhasil, maka pada Serial Monitor akan muncul pesan Terhubung ke WiFi! disertai dengan alamat IP lokal ESP32. Pengujian ini bertujuan untuk memverifikasi jaringan sebelum melanjutkan ke integrasi layanan Blynk.
 
-```
+```cpp
 #define BLYNK_TEMPLATE_ID "TMPLxxxxxxx"
 #define BLYNK_TEMPLATE_NAME "Tes Koneksi Blynk"
 #define BLYNK_AUTH_TOKEN "YourAuthToken"  // Ganti dengan token asli dari Blynk
@@ -419,7 +420,7 @@ void loop() {
 2. **Versi IoT**     
 Versi ini merupakan pengembangan dari sistem alarm konvensional dengan menambahkan konektivitas ke platform Blynk IoT. Dengan integrasi ini, ESP32 tidak hanya berfungsi sebagai unit deteksi lokal, tetapi juga mampu mengirimkan data sensor gas dan api ke aplikasi Blynk secara real-time. Pengguna dapat memantau tingkat konsentrasi gas (dalam bentuk persen), status deteksi api, serta mengakses sistem alarm dari jarak jauh. Blynk juga digunakan untuk menampilkan indikator status dan mengirimkan notifikasi langsung ke perangkat pengguna saat terjadi peningkatan gas, munculnya api, atau keduanya sekaligus. Selain itu, tersedia fitur kontrol manual untuk menyalakan atau mematikan relay melalui tombol di aplikasi.
 
-```
+```cpp
 #define BLYNK_TEMPLATE_ID ""
 #define BLYNK_TEMPLATE_NAME "Fire Alarm Project"
 #define BLYNK_AUTH_TOKEN ""
