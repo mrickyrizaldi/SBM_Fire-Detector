@@ -630,20 +630,39 @@ Komponen seperti sensor gas, sensor api, buzzer, LED merah, dan relay dihubungka
 
 Pengujian dilakukan dengan mendekatkan sumber asap/gas (misalnya korek gas) ke sensor MQ-135 dan sumber nyala api ke flame sensor. Terlihat bahwa:
 
-* Sensor gas mendeteksi adanya peningkatan konsentrasi gas (nilai ADC > 200).
+* Sensor gas mendeteksi adanya peningkatan konsentrasi gas (nilai ADC > 400).
 * Sensor api memberikan logika HIGH (dibalik secara digitalRead menjadi 1) saat menangkap nyala api.
 
 Respons kedua sensor ini langsung tercermin pada Serial Monitor dan indikator LED/buzzer. Hal ini menunjukkan bahwa kalibrasi threshold sudah cukup sensitif untuk mendeteksi kondisi tidak normal secara dini.
 
-**Tabel 4. Hasil Pengujian Sensor Gas (MQ-135)**
-| No | Kondisi Uji                     | Nilai ADC Gas | Persentase Gas (&) | Status Gas |
+**Hasil Pengujian Sensor Gas (MQ-135)**  
+| No | Kondisi Uji                     | Nilai ADC Gas | Persentase Gas (%) | Status Gas |
 | -- | ------------------------------- | ------------- | -----------------  | ---------- |
 | 1  | Udara ruangan normal            | 130           | 4                  | Aman (0)   |
-| 2  | Asap ringan dari kertas dibakar | 320           | 8                  | Gas (1)    |
-| 3  | Korek gas didekatkan terus      | 410-4095      | 10-100             | Gas (1)    |
+| 2  | Asap dari kertas dibakar        | 400 - 4095    | 10-100             | Gas (1)    |
+| 3  | Korek gas didekatkan terus      | 410 - 4095    | 10-100             | Gas (1)    |
 
-> Nilai *Presentase Gas (%)* merupakan hasil pemetaan linear dari nilai ADC 0-4095 ke skala internal sistem 0-100% (bukan kadar gas riil).
+> Nilai Persentase Gas (%) merupakan hasil pemetaan linear dari nilai ADC 0–4095 ke skala internal sistem 0–100% (bukan kadar gas riil), sehingga nilainya juga bervariasi tergantung jarak paparan gas atau asap terhadap sensor. Pada paparan gas yang tinggi dan dalam durasi lama, nilai ADC sensor dapat meningkat hingga mendekati batas maksimum pembacaan ADC ESP32 (4095). Kondisi ini menunjukkan bahwa keluaran sensor telah mencapai daerah saturasi, sehingga perubahan konsentrasi gas selanjutnya tidak lagi terdeteksi secara proporsional oleh sistem.
 
+**Hasil Pengujian Sensor Api**  
+| No | Kondisi Uji         | Status Api | Nilai Digital | Keterangan              |
+| -- | ------------------- | ---------- | ------------- | ----------------------- |
+| 1  | Tidak ada nyala api | LOW        | 0             | Aman / tidak terdeteksi |
+| 2  | Api korek ±15 cm    | HIGH       | 1             | Api terdeteksi          |
+| 3  | Api korek ±3–5 cm   | HIGH       | 1             | Api terdeteksi jelas    |
+
+> Api kecil dengan jarak yang sangat jauh lebih sulit terdeteksi secara akurat
+
+**Hasil Pengujian Kombinasi Sensor dan Respons Sistem**  
+Hasil pengujian sensor gas dan sensor api dirangkum dalam tabel berikut untuk menunjukkan hubungan antara nilai ADC, status sistem, dan kondisi lingkungan saat pengujian.  
+| No | ADC Gas | Status Gas | Status Api | LED Merah    | Buzzer          | Relay | Keterangan Sistem    |
+| -- | ------- | ---------- | ---------- | ------------ | --------------- | ----- | -------------------- |
+| 1  | 190     | 0          | 0          | Heartbeat    | OFF             | OFF   | Standby / Normal     |
+| 2  | 450     | 1          | 0          | ON terus     | Beep tiap 2 dtk | OFF   | Peringatan gas       |
+| 3  | 210     | 0          | 1          | Blink lambat | Blink lambat    | OFF   | Deteksi api          |
+| 4  | 580     | 1          | 1          | Blink cepat  | ON terus        | ON    | Kebakaran terdeteksi |
+
+> Berdasarkan hasil pengujian, dapat dilihat bahwa sistem mampu membedakan kondisi normal, peringatan gas, deteksi api, hingga kondisi kebakaran berdasarkan kombinasi nilai ADC sensor gas dan logika digital sensor api. Nilai skala gas yang ditampilkan pada aplikasi Blynk merupakan indikator relatif dari tingkat paparan gas, bukan konsentrasi gas dalam satuan ppm atau persen sebenarnya.
 
 ### 3. Respons Output Lokal (LED, Buzzer, Relay)
 Sistem menunjukkan output berbeda tergantung kombinasi kondisi sensor:
