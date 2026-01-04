@@ -38,7 +38,7 @@ Pada proyek ini, alat dan bahan yang digunakan adalah sebagai berikut:
 5. **Buzzer**: Sebagai indikator suara untuk memberikan peringatan audio dengan pola tertentu.
 6. **Relay:** Untuk mengontrol beban eksternal seperti pompa air atau alarm tambahan.
 7. **Kabel jumper**: Untuk menyusun rangkaian prototipe.
-8. **Sumber daya**: Daya dari port USB laptop/PC atau adaptor 5V untuk Arduino.
+8. **Sumber daya**: Daya dari port USB laptop/PC atau adaptor 5V untuk ESP32.
 9. **Laptop/PC**: Untuk memprogram ESP32 menggunakan Arduino IDE dan memonitor keluaran melalui Serial Monitor.
 10. **Aplikasi Blynk:** Untuk konektivitas dan notifikasi berbasis IoT.
 
@@ -235,7 +235,7 @@ Desain ini mengadopsi pendekatan hierarkis: semakin tinggi tingkat bahaya, semak
 
 ### 2. Konfigurasi Aplikasi Blynk
 Agar sistem alarm kebakaran berbasis ESP32 dapat terhubung dengan aplikasi Blynk dan mengirimkan data secara real-time serta menerima kontrol, ikuti tahapan berikut:
-##### 1. Membuat Template dan Device di Blynk  
+**1. Membuat Template dan Device di Blynk**  
 - Buka [Blynk Console](https://blynk.cloud/dashboard).
 - Klik menu “Templates” → **+ New Template**.
 - Isi nama: misalnya `Fire Alarm Project`.
@@ -258,7 +258,7 @@ Agar sistem alarm kebakaran berbasis ESP32 dapat terhubung dengan aplikasi Blynk
    * BLYNK_AUTH_TOKEN
      Salin dan gunakan data ini di kode program.
 
-##### 2. Setup Aplikasi Blynk di HP
+**2. Setup Aplikasi Blynk di HP**
 - Unduh aplikasi Blynk IoT dari Play Store / App Store.
 - Login dengan akun yang sama seperti di Blynk Console.
 - Masuk ke menu "Devices", pilih device `Fire Alarm`.
@@ -273,7 +273,7 @@ Agar sistem alarm kebakaran berbasis ESP32 dapat terhubung dengan aplikasi Blynk
      * Mode: Switch (0 = OFF, 1 = ON)
 - Simpan dan kembali ke dashboard aplikasi.
 
-##### 3. Menambahkan Notifikasi Otomatis (Event Notification)
+**3. Menambahkan Notifikasi Otomatis (Event Notification)**
 - Di Blynk Console → buka template → tab “Events”.
 - Buat 3 event baru:
 
@@ -285,7 +285,7 @@ Agar sistem alarm kebakaran berbasis ESP32 dapat terhubung dengan aplikasi Blynk
 
 - Setiap event aktif akan dikirim ke HP pengguna secara otomatis saat dipicu melalui fungsi program
 
-##### 4. Uji Coba dan Verifikasi
+**4. Uji Coba dan Verifikasi**
 Setelah setup selesai:
 * Upload kode ke ESP32 versi IoT.
 * Buka aplikasi Blynk, nyalakan perangkat.
@@ -630,10 +630,20 @@ Komponen seperti sensor gas, sensor api, buzzer, LED merah, dan relay dihubungka
 
 Pengujian dilakukan dengan mendekatkan sumber asap/gas (misalnya korek gas) ke sensor MQ-135 dan sumber nyala api ke flame sensor. Terlihat bahwa:
 
-* Sensor gas mendeteksi adanya peningkatan konsentrasi gas (nilai ADC > 400).
+* Sensor gas mendeteksi adanya peningkatan konsentrasi gas (nilai ADC > 200).
 * Sensor api memberikan logika HIGH (dibalik secara digitalRead menjadi 1) saat menangkap nyala api.
 
 Respons kedua sensor ini langsung tercermin pada Serial Monitor dan indikator LED/buzzer. Hal ini menunjukkan bahwa kalibrasi threshold sudah cukup sensitif untuk mendeteksi kondisi tidak normal secara dini.
+
+**Tabel 4. Hasil Pengujian Sensor Gas (MQ-135)**
+| No | Kondisi Uji                     | Nilai ADC Gas | Persentase Gas (&) | Status Gas |
+| -- | ------------------------------- | ------------- | -----------------  | ---------- |
+| 1  | Udara ruangan normal            | 130           | 4                  | Aman (0)   |
+| 2  | Asap ringan dari kertas dibakar | 320           | 8                  | Gas (1)    |
+| 3  | Korek gas didekatkan terus      | 410-4095      | 10-100             | Gas (1)    |
+
+> Nilai *Presentase Gas (%)* merupakan hasil pemetaan linear dari nilai ADC 0-4095 ke skala internal sistem 0-100% (bukan kadar gas riil).
+
 
 ### 3. Respons Output Lokal (LED, Buzzer, Relay)
 Sistem menunjukkan output berbeda tergantung kombinasi kondisi sensor:
