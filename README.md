@@ -638,7 +638,7 @@ Respons kedua sensor ini langsung tercermin pada Serial Monitor dan indikator LE
 **Hasil Pengujian Sensor Gas (MQ-135)**  
 | No | Kondisi Uji                     | Nilai ADC Gas | Persentase Gas (%) | Status Gas |
 | -- | ------------------------------- | ------------- | -----------------  | ---------- |
-| 1  | Udara ruangan normal            | 130           | 4                  | Aman (0)   |
+| 1  | Udara ruangan normal            | 67            | 2                  | Aman (0)   |
 | 2  | Asap dari kertas dibakar        | 400 - 4095    | 10-100             | Gas (1)    |
 | 3  | Korek gas didekatkan terus      | 410 - 4095    | 10-100             | Gas (1)    |
 
@@ -681,6 +681,16 @@ Setelah konfigurasi template, datastream, dan widget selesai, ESP32 berhasil men
 * LED virtual (V1 & V3) menampilkan status api/gas.
 * Switch (V2) dapat mengontrol relay secara manual.
 * Notifikasi otomatis muncul di HP saat ada deteksi gas, api, atau kebakaran.
+
+Berikut adalah tabel hasil pengujiannya:
+| No | Nilai ADC Gas | Persentase Gas V0 (%) | Status Gas (V3) | Status Api (V1) | LED Virtual Gas | LED Virtual Api | Notifikasi Blynk | Status Relay  |
+| -- | ------------- | --------------------- | --------------- | --------------- | --------------- | --------------- | ---------------- | ------------- |
+| 1  | 190           | 4                     | 0               | 0               | OFF             | OFF             | Tidak ada        | OFF           |
+| 2  | 450           | 11                    | 1               | 0               | ON              | OFF             | `gas_alert`      | OFF           |
+| 3  | 210           | 5                     | 0               | 1               | OFF             | ON              | `flame_alert`    | OFF           |
+| 4  | 580           | 14                    | 1               | 1               | ON              | ON              | `fire_alert`     | ON (terkunci) |
+
+> Nilai pada Gauge V0 ditampilkan dalam bentuk persentase hasil pemetaan linear dari nilai ADC sensor gas ke skala internal 0–100%, sehingga digunakan sebagai indikator relatif tingkat paparan gas di lingkungan, bukan sebagai kadar gas sebenarnya. Notifikasi akan dikirimkan satu kali pada saat pertama kali terjadi perubahan kondisi sensor, sedangkan relay akan tetap aktif hingga pengguna menonaktifkannya secara manual melalui switch V2.
 
 <img src="https://github.com/user-attachments/assets/dbb70659-308e-4ce6-a793-744661eaf465" style="width: 50%; height: auto;" />
 <img src="https://github.com/user-attachments/assets/43e954df-9381-4db9-9a6a-3ba573b6e27e" style="width: 50%; height: auto;" />
